@@ -15,5 +15,6 @@ public class Neuron {
     public Neuron(ArrayList<Weight> inputs, ArrayList<Weight> outputs) {
         this.inputs = inputs;
         this.outputs = outputs;
+        this.bias = 0;
     }
 }
