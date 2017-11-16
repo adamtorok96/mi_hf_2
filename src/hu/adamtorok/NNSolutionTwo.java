@@ -1,13 +1,14 @@
 package hu.adamtorok;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class NNSolutionOne {
+/**
+ * Created by edems on 2017.11.16..
+ */
+public class NNSolutionTwo {
 
-    public static void main(String[] args) {
+    public static void main(String args[]) {
         Scanner scanner = new Scanner(System.in);
 
         String line = scanner.nextLine();
@@ -21,26 +22,51 @@ public class NNSolutionOne {
             layerCounts[i] = Integer.parseInt(inputs[i]);
         }
 
-//        ArrayList<float[]> weightContainer = new ArrayList<>();
-//
-//        for(int i = 0; i < layerCounts.length - 1; i++) {
-//            line = scanner.nextLine();
-//
-//            inputs = line.split(",");
-//
-//            float weights[] = new float[layerCounts[i] + 1];
-//
-//            System.out.println("size: " + weights.length);
-//
-//            for(int j = 0; j < weights.length; j++) {
-//                weights[j] = Float.parseFloat(inputs[j]);
-//                System.out.println(i +" -> " + j +": " + weights[j]);
-//            }
-//        }
+        // Reading weights
+        ArrayList<double[]> weightContainer = new ArrayList<>();
+
+        for(int i = 0; i < layerCounts.length - 1; i++) {
+            for(int l = 0; l < layerCounts[i + 1]; l++) {
+
+                line = scanner.nextLine();
+
+                inputs = line.split(",");
+
+                double weights[] = new double[layerCounts[i] + 1];
+
+//                System.out.println("size: " + weights.length);
+
+                for(int j = 0; j < weights.length; j++) {
+                    weights[j] = Double.parseDouble(inputs[j]);
+//                    System.out.println(i +" -> " + j +": " + weights[j]);
+                }
+
+                weightContainer.add(weights);
+            }
+        }
+
+        // Reading inputs
+        ArrayList<double[]> inputContainer = new ArrayList<>();
+
+        line = scanner.nextLine();
+        int nInputs = Integer.parseInt(line);
+
+        for(int i = 0; i < nInputs; i++) {
+            line = scanner.nextLine();
+
+            inputs = line.split(",");
+
+            double in[] = new double[inputs.length];
+
+            for(int j = 0; j < inputs.length; j++) {
+                in[j] = Double.parseDouble(inputs[j]);
+            }
+
+            inputContainer.add(in);
+        }
+
 
         ArrayList<Neuron> neurons = new ArrayList<>();
-
-        NormalDistribution nd = new NormalDistribution(0, 0.1);
 
         /**
          * Layers
@@ -53,7 +79,7 @@ public class NNSolutionOne {
                 for(int j = 0; j < layerCounts[i]; j++) {
                     //System.out.println("\tNeuron: " + j);
 
-                    neurons.add(new Neuron(null, null));
+                    neurons.add(new FirstLayerNeuron(null, 0));
                 }
             } // last neurons
             /*
@@ -61,20 +87,25 @@ public class NNSolutionOne {
                 for(int j = 0; j < layerCounts[i]; j++) {
                     //System.out.println("\tNeuron: " + j);
 
+
                     Neuron neuron = new Neuron(null, null);
+                    neuron.bias = weightContainer.get(weightContainer.size() - 1)[weightContainer.get(weightContainer.size() - 1).length - 1];
+//                    System.out.println("llb: " + neuron.bias);
 
                     ArrayList<Weight> weights = new ArrayList<>();
 
                     for(int k = 0; k < layerCounts[i - 1]; k++) {
 
-                        int n = neurons.size() - layerCounts[i - 1] + k;
+                        int n = neurons.size() - layerCounts[i - 1] + k - j;
 
                         //System.out.println("\tback: " + n);
 
                         Weight weight = new Weight(
                                 neurons.get(n),
-                                null
+                                neuron
                         );
+
+                        weight.weight = weightContainer.get(neurons.size() - layerCounts[0])[k];
 
                         weights.add(weight);
 
@@ -87,8 +118,8 @@ public class NNSolutionOne {
                     neuron.inputs = weights;
                     neurons.add(neuron);
                 }
-            } */
-            else {
+            }
+            */else {
                 /**
                  * Neurons
                  */
@@ -96,12 +127,14 @@ public class NNSolutionOne {
                     //System.out.println("\tNeuron: " + j);
 
                     Neuron neuron = new Neuron(null, null);
+                    neuron.bias = weightContainer.get(neurons.size() - layerCounts[0])[weightContainer.get(neurons.size() - layerCounts[0]).length - 1];
+                    neuron.hidden = i != layerCounts.length - 1;
 
                     ArrayList<Weight> weights = new ArrayList<>();
 
                     for(int k = 0; k < layerCounts[i - 1]; k++) {
 
-                        int n = neurons.size() - layerCounts[i - 1] + k;
+                        int n = neurons.size() - layerCounts[i - 1] + k - j;
 
                         //System.out.println("\tback: " + n);
 
@@ -110,7 +143,7 @@ public class NNSolutionOne {
                                 neuron
                         );
 
-                        weight.weight = nd.sample();
+                        weight.weight = weightContainer.get(neurons.size() - layerCounts[0])[k];
 
                         weights.add(weight);
 
@@ -127,6 +160,7 @@ public class NNSolutionOne {
 
         }
 
+/*
         for(int i = 0; i < layerCounts.length; i++) {
             System.out.print(layerCounts[i]);
 
@@ -152,7 +186,34 @@ public class NNSolutionOne {
                 System.out.print('\n');
             }
         }
+*/
+
+        System.out.println(nInputs);
+
+        for(int i = 0; i < nInputs; i++) {
+
+            for(int j = 0; j < inputContainer.get(i).length; j++) {
+                FirstLayerNeuron fln = (FirstLayerNeuron) neurons.get(j);
+                fln.y = inputContainer.get(i)[j];
+
+//                System.out.println(inputContainer.get(i)[j] + " == " + neurons.get(j).getY());
+            }
+
+            int lastLayerNeurons = layerCounts[layerCounts.length - 1];
+
+            for(int j = 0; j < lastLayerNeurons; j++) {
+                Neuron lastNeuron = neurons.get(neurons.size() - lastLayerNeurons + j);
+
+                System.out.print(lastNeuron.getY());
+
+                if( j < lastLayerNeurons - 1 )
+                    System.out.print(',');
+            }
+
+
+            if( i < nInputs - 1) {
+                System.out.print('\n');
+            }
+        }
     }
-
-
 }

@@ -1,7 +1,5 @@
 package hu.adamtorok;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
-
 
 /**
  * Created by edems on 2017.11.01..
@@ -16,8 +14,11 @@ public class Weight {
         this.input = input;
         this.output = output;
 
-        NormalDistribution nd = new NormalDistribution(0, 0.1);
+//        NormalDistribution nd = new NormalDistribution(0, 0.1);
 
-        this.weight = nd.sample();
+        this.weight = 0;
+
+        if(input == null || output == null )
+            throw new NullPointerException("weight");
     }
 }
