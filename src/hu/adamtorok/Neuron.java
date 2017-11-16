@@ -10,7 +10,7 @@ public class Neuron {
     ArrayList<Weight> inputs;
     ArrayList<Weight> outputs;
 
-    float bias;
+    double bias;
 
     public Neuron(ArrayList<Weight> inputs, ArrayList<Weight> outputs) {
         this.inputs = inputs;

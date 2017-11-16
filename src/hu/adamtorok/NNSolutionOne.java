@@ -130,10 +130,11 @@ public class NNSolutionOne {
         System.out.print('\n');
 
         for(int i = layerCounts[0]; i < neurons.size(); i++) {
-            int size = neurons.get(i).inputs.size();
+            Neuron neuron = neurons.get(i);
+            int size = neuron.inputs.size();
 
             for(int j = 0; j < size; j++) {
-                System.out.print(neurons.get(i).inputs.get(j).weight);
+                System.out.print(neuron.inputs.get(j).weight);
                 System.out.print(',');
             }
 
