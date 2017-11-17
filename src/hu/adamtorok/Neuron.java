@@ -12,7 +12,7 @@ public class Neuron {
     ArrayList<Weight> inputs;
     ArrayList<Weight> outputs;
 
-    double bias, y;
+    double bias, y, delta, dBias;
     boolean hasY = false;
 
     boolean hidden = false;
@@ -34,23 +34,33 @@ public class Neuron {
         ;
     }
 
-    protected double getY() {
-        if( hasY )
-            return y;
+    protected double getSum() {
+        double sum = bias;
 
-        y = bias;
-
-//        System.out.println("size: "+ inputs.size());
+        //        System.out.println("size: "+ inputs.size());
 //        for (Weight input : inputs) {
 //            System.out.println("\tIN(" + n + " = " + input.output.n + "): " + input.input.n +" w: " + input.weight);
 //        }
 
         for (Weight input : inputs) {
-            y += input.weight * input.input.getY();
+            sum += input.weight * input.input.getY();
         }
 
-        hasY = true;
+        return sum;
+    }
 
-        return this.y = activating(y);
+    protected double getY() {
+//        System.out.println("getY: "+ this.y +" has: " + hasY);
+//        if( hasY )
+//            return y;
+//
+//        hasY = true;
+//        this.y = activating(getSum());
+//
+//        System.out.println("sum: " + getSum());
+//
+//        return this.y;
+
+        return activating(getSum());
     }
 }

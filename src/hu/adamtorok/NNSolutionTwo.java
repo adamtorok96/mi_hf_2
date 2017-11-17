@@ -82,44 +82,7 @@ public class NNSolutionTwo {
                     neurons.add(new FirstLayerNeuron(null, 0));
                 }
             } // last neurons
-            /*
-            else if( i == layerCounts.length - 1) {
-                for(int j = 0; j < layerCounts[i]; j++) {
-                    //System.out.println("\tNeuron: " + j);
-
-
-                    Neuron neuron = new Neuron(null, null);
-                    neuron.bias = weightContainer.get(weightContainer.size() - 1)[weightContainer.get(weightContainer.size() - 1).length - 1];
-//                    System.out.println("llb: " + neuron.bias);
-
-                    ArrayList<Weight> weights = new ArrayList<>();
-
-                    for(int k = 0; k < layerCounts[i - 1]; k++) {
-
-                        int n = neurons.size() - layerCounts[i - 1] + k - j;
-
-                        //System.out.println("\tback: " + n);
-
-                        Weight weight = new Weight(
-                                neurons.get(n),
-                                neuron
-                        );
-
-                        weight.weight = weightContainer.get(neurons.size() - layerCounts[0])[k];
-
-                        weights.add(weight);
-
-                        if( neurons.get(n).outputs == null )
-                            neurons.get(n).outputs = new ArrayList<>();
-
-                        neurons.get(n).outputs.add(weight);
-                    }
-
-                    neuron.inputs = weights;
-                    neurons.add(neuron);
-                }
-            }
-            */else {
+           else {
                 /**
                  * Neurons
                  */

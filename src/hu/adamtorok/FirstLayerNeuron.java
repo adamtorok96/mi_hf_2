@@ -15,6 +15,11 @@ public class FirstLayerNeuron extends Neuron {
     }
 
     @Override
+    protected double getSum() {
+        return 0;
+    }
+
+    @Override
     protected double getY() {
         return this.y;
     }

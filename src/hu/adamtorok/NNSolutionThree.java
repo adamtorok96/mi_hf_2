@@ -123,6 +123,51 @@ public class NNSolutionThree {
 
         }
 
+
+        neurons.get(neurons.size() - 1).delta = 1.0;
+
+        for(int j = 0; j < inputContainer.get(0).length; j++) {
+            FirstLayerNeuron fln = (FirstLayerNeuron) neurons.get(j);
+            fln.y = inputContainer.get(0)[j];
+        }
+
+        for(int l = layerCounts.length - 2; l >= 0; l--) {
+//            System.out.println("layer: " + l);
+
+            int offset = 0;
+
+            for(int i = 0; i < l; i++) {
+                offset += layerCounts[i];
+            }
+
+            for(int i = 0; i < layerCounts[l]; i++) {
+                Neuron neuron = neurons.get(offset + i);
+
+                double sum = 0;
+
+                for(Weight w : neuron.outputs) {
+                    sum += w.output.delta * w.weight;
+                }
+
+                double s = neuron.getSum();
+
+//                System.out.println("n: "+ (s > 0 ? 1 : 0) +"->" + s);
+
+                neuron.delta = sum * (s > 0 ? 1 : 0);
+            }
+        }
+
+        for(int i = layerCounts[0]; i < neurons.size(); i++) {
+            Neuron neuron = neurons.get(i);
+
+            for(Weight w : neuron.inputs) {
+                w.dWeight = neuron.delta * w.input.getY();
+            }
+
+            neuron.dBias = neuron.delta;
+//            System.out.println(neuron.dBias);
+        }
+
         for(int i = 0; i < layerCounts.length; i++) {
             System.out.print(layerCounts[i]);
 
@@ -140,15 +185,20 @@ public class NNSolutionThree {
                 fln.y = inputContainer.get(i)[j];
             }
 
-            int lastLayerNeurons = layerCounts[layerCounts.length - 1];
+            neurons.get(neurons.size() - 1).getY();
 
-            for(int j = 0; j < lastLayerNeurons; j++) {
-                Neuron lastNeuron = neurons.get(neurons.size() - lastLayerNeurons + j);
+            for(int j = layerCounts[0]; j < neurons.size(); j++) {
+                Neuron neuron = neurons.get(j);
 
-                System.out.print(lastNeuron.getY());
-
-                if( j < lastLayerNeurons - 1 )
+                for(int k = 0; k < neuron.inputs.size(); k++) {
+                    System.out.print(neuron.inputs.get(k).dWeight);
                     System.out.print(',');
+                }
+
+                System.out.print(neuron.dBias);
+
+                if( j < neurons.size()  - 1 )
+                    System.out.print('\n');
             }
 
 

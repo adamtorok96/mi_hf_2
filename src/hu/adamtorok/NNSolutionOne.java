@@ -21,23 +21,6 @@ public class NNSolutionOne {
             layerCounts[i] = Integer.parseInt(inputs[i]);
         }
 
-//        ArrayList<float[]> weightContainer = new ArrayList<>();
-//
-//        for(int i = 0; i < layerCounts.length - 1; i++) {
-//            line = scanner.nextLine();
-//
-//            inputs = line.split(",");
-//
-//            float weights[] = new float[layerCounts[i] + 1];
-//
-//            System.out.println("size: " + weights.length);
-//
-//            for(int j = 0; j < weights.length; j++) {
-//                weights[j] = Float.parseFloat(inputs[j]);
-//                System.out.println(i +" -> " + j +": " + weights[j]);
-//            }
-//        }
-
         ArrayList<Neuron> neurons = new ArrayList<>();
 
         NormalDistribution nd = new NormalDistribution(0, 0.1);
